@@ -20,18 +20,19 @@ import tensorflow as tf
 import pickle
 from collections import deque
 
-os.environ["SC2PATH"] = '/media/adamselement/SAMSUNG SSD/Projects/match-runner/sc2-bot-match-runner/StarCraftII'
+os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
 
 #game parameters
 ACTIONS = 5 # possible actions: jump, do nothing
 GAMMA = 0.99 # decay rate of past observations original 0.99
 OBSERVE = 10000 # timesteps to observe before training
-EXPLORE = 300000  # frames over which to anneal epsilon
+EXPLORE = 500000  # frames over which to anneal epsilon
 FINAL_EPSILON = 0.0001 # final value of epsilon
 INITIAL_EPSILON = 0.9 # starting value of epsilon
-REPLAY_MEMORY = 25000 # number of previous transitions to remember
-BATCH = 16 # size of minibatch
+REPLAY_MEMORY = 50000 # number of previous transitions to remember
+BATCH = 32 # size of minibatch
 FRAME_PER_ACTION = 1
+GAME = 'sc2'
 #LEARNING_RATE = 1e-4
 LEARNING_RATE = 0.0001
 img_rows , img_cols = 64,84
@@ -50,59 +51,60 @@ class terranAgent(base_agent.BaseAgent):
 		self.move_coordinates = (0, 0)
 		self.previous_score = 0
 
-    def weight_variable(self, shape):
-        initial = tf.truncated_normal(shape, stddev = 0.01)
-        return tf.Variable(initial)
+	def weight_variable(self, shape):
+		initial = tf.truncated_normal(shape, stddev = 0.01)
+		return tf.Variable(initial)
 
-    def bias_variable(self, shape):
-        initial = tf.constant(0.01, shape = shape)
-        return tf.Variable(initial)
+	def bias_variable(self, shape):
+		initial = tf.constant(0.01, shape = shape)
+		return tf.Variable(initial)
 
-    def conv2d(self, x, W, stride):
-        return tf.nn.conv2d(x, W, strides = [1, stride, stride, 1], padding = "SAME")
+	def conv2d(self, x, W, stride):
+		return tf.nn.conv2d(x, W, strides = [1, stride, stride, 1], padding = "SAME")
 
-    def max_pool_2x2(self, x):
-        return tf.nn.max_pool(x, ksize = [1, 2, 2, 1], strides = [1, 2, 2, 1], padding = "SAME")
+	def max_pool_2x2(self, x):
+		return tf.nn.max_pool(x, ksize = [1, 2, 2, 1], strides = [1, 2, 2, 1], padding = "SAME")
 
-    def createNetwork(self):
-        # network weights
-        W_conv1 = weight_variable([8, 8, 4, 32])
-        b_conv1 = bias_variable([32])
+	def createNetwork(self):
+		# network weights
+		W_conv1 = self.weight_variable([8, 8, 4, 32])
+		b_conv1 = self.bias_variable([32])
 
-        W_conv2 = weight_variable([4, 4, 32, 64])
-        b_conv2 = bias_variable([64])
+		W_conv2 = self.weight_variable([4, 4, 32, 64])
+		b_conv2 = self.bias_variable([64])
 
-        W_conv3 = weight_variable([3, 3, 64, 64])
-        b_conv3 = bias_variable([64])
+		W_conv3 = self.weight_variable([3, 3, 64, 64])
+		b_conv3 = self.bias_variable([64])
 
-        W_fc1 = weight_variable([1600, 512])
-        b_fc1 = bias_variable([512])
+		W_fc1 = self.weight_variable([1536, 512])
+		b_fc1 = self.bias_variable([512])
 
-        W_fc2 = weight_variable([512, ACTIONS])
-        b_fc2 = bias_variable([ACTIONS])
+		W_fc2 = self.weight_variable([512, ACTIONS])
+		b_fc2 = self.bias_variable([ACTIONS])
 
-        # input layer
-        s = tf.placeholder("float", [None, 64, 84, 4])
+		# input layer
+		s = tf.placeholder("float", [None, 64, 84, 4])
 
-        # hidden layers
-        h_conv1 = tf.nn.relu(conv2d(s, W_conv1, 4) + b_conv1)
-        h_pool1 = max_pool_2x2(h_conv1)
+		# hidden layers
+		h_conv1 = tf.nn.relu(self.conv2d(s, W_conv1, 4) + b_conv1)
+		h_pool1 = self.max_pool_2x2(h_conv1)
 
-        h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2, 2) + b_conv2)
-        #h_pool2 = max_pool_2x2(h_conv2)
+		h_conv2 = tf.nn.relu(self.conv2d(h_pool1, W_conv2, 2) + b_conv2)
+		#h_pool2 = max_pool_2x2(h_conv2)
 
-        h_conv3 = tf.nn.relu(conv2d(h_conv2, W_conv3, 1) + b_conv3)
-        #h_pool3 = max_pool_2x2(h_conv3)
+		h_conv3 = tf.nn.relu(self.conv2d(h_conv2, W_conv3, 1) + b_conv3)
+		#h_pool3 = max_pool_2x2(h_conv3)
 
-        #h_pool3_flat = tf.reshape(h_pool3, [-1, 256])
-        h_conv3_flat = tf.reshape(h_conv3, [-1, 1600])
+		#h_pool3_flat = tf.reshape(h_pool3, [-1, 256])
+		#h_conv3_flat = tf.reshape(h_conv3, [-1, 1600])
+		h_conv3_flat = tf.reshape(h_conv3, [-1, 1536])
 
-        h_fc1 = tf.nn.relu(tf.matmul(h_conv3_flat, W_fc1) + b_fc1)
+		h_fc1 = tf.nn.relu(tf.matmul(h_conv3_flat, W_fc1) + b_fc1)
 
-        # readout layer
-        readout = tf.matmul(h_fc1, W_fc2) + b_fc2
+		# readout layer
+		readout = tf.matmul(h_fc1, W_fc2) + b_fc2
 
-        return s, readout, h_fc1
+		return s, readout, h_fc1
 
 	def can_do(self, obs, action):
 		return action in obs.observation.available_actions
@@ -153,9 +155,9 @@ class terranAgent(base_agent.BaseAgent):
 		self.previous_score = self.score
 
 		self.x_t1 = self.grab_screen(obs)
-        self.ret, self.x_t1 = cv2.threshold(self.x_t1, 1, 255, cv2.THRESH_BINARY)
-        self.x_t1 = np.reshape(self.x_t1, (64, 84, 1))
-        self.s_t1 = np.append(self.x_t1, self.s_t[:, :, :3], axis=2)
+		self.ret, self.x_t1 = cv2.threshold(self.x_t1, 1, 255, cv2.THRESH_BINARY)
+		self.x_t1 = np.reshape(self.x_t1, (64, 84, 1))
+		self.s_t1 = np.append(self.x_t1, self.s_t[:, :, :3], axis=2)
 
 		self.last_time = time.time()
 
@@ -168,39 +170,39 @@ class terranAgent(base_agent.BaseAgent):
 		#only train if done observing; sample a minibatch to train on
 		#trainBatch(random.sample(self.D, BATCH)) if self.t > self.OBSERVE
 
-		if self.t > self.OBSERVE:
-            minibatch = random.sample(self.D, BATCH)
+		if self.t > OBSERVE:
+			minibatch = random.sample(self.D, BATCH)
 
-            # get the batch variables
-            s_j_batch = [d[0] for d in minibatch]
-            a_batch = [d[1] for d in minibatch]
-            r_batch = [d[2] for d in minibatch]
-            s_j1_batch = [d[3] for d in minibatch]
+			# get the batch variables
+			s_j_batch = [d[0] for d in minibatch]
+			a_batch = [d[1] for d in minibatch]
+			r_batch = [d[2] for d in minibatch]
+			s_j1_batch = [d[3] for d in minibatch]
 
-            y_batch = []
-            readout_j1_batch = readout.eval(feed_dict = {self.s : s_j1_batch})
-            for i in range(0, len(minibatch)):
-                self.terminal = minibatch[i][4]
-                # if terminal, only equals reward
-                if terminal:
-                    y_batch.append(r_batch[i])
-                else:
-                    y_batch.append(r_batch[i] + GAMMA * np.max(readout_j1_batch[i]))
+			y_batch = []
+			readout_j1_batch = self.readout.eval(feed_dict = {self.s : s_j1_batch})
+			for i in range(0, len(minibatch)):
+				self.terminal = minibatch[i][4]
+				# if terminal, only equals reward
+				if self.terminal:
+					y_batch.append(r_batch[i])
+				else:
+					y_batch.append(r_batch[i] + GAMMA * np.max(readout_j1_batch[i]))
 
-            # perform gradient step
-            train_step.run(feed_dict = {
-                y : y_batch,
-                a : a_batch,
-                s : s_j_batch}
-            )
+			# perform gradient step
+			self.train_step.run(feed_dict = {
+				self.y : y_batch,
+				self.a : a_batch,
+				self.s : s_j_batch}
+			)
 		self.s_t = self.s_t1
 		self.t = self.t + 1
 		self.total_reward += self.r_t
 
 		# save progress every 1000 iterations
-        # save progress every 10000 iterations
-        if self.t % 10000 == 0:
-            saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step = t)
+		# save progress every 10000 iterations
+		if self.t % 10000 == 0:
+			saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step = t)
 
 		state = ""
 		if self.t <= OBSERVE:
@@ -210,30 +212,30 @@ class terranAgent(base_agent.BaseAgent):
 		else:
 			state = "train"
 
-        print("TIMESTEP", self.t, "TOTAL REWARD", self.total_reward, "/ STATE", self.state, \
-            "/ EPSILON", self.epsilon, "/ ACTION", self.action_index, "/ REWARD", self.r_t, \
-            "/ Q_MAX %e" % np.max(self.readout_t))
+		print("TIMESTEP", self.t, "TOTAL REWARD", self.total_reward, "/ STATE", state, \
+			"/ EPSILON", self.epsilon, "/ ACTION", self.action_index, "/ REWARD", self.r_t, \
+			"/ Q_MAX %e" % np.max(self.readout_t))
 
 		self.terminal = False
 
-        # choose an action epsilon greedily
-        self.readout_t = readout.eval(feed_dict={self.s : [self.s_t]})[0]
-        self.a_t = np.zeros([ACTIONS])
-        self.action_index = 0
-        if self.t % FRAME_PER_ACTION == 0:
-            if random.random() <= self.epsilon:
-                print("----------Random Action----------")
-                self.action_index = random.randrange(ACTIONS)
-                self.a_t[random.randrange(ACTIONS)] = 1
-            else:
-                self.action_index = np.argmax(self.readout_t)
-                self.a_t[self.action_index] = 1
-        else:
-            self.a_t[0] = 1 # do nothing
+		# choose an action epsilon greedily
+		self.readout_t = self.readout.eval(feed_dict={self.s : [self.s_t]})[0]
+		self.a_t = np.zeros([ACTIONS])
+		self.action_index = 0
+		if self.t % FRAME_PER_ACTION == 0:
+			if random.random() <= self.epsilon:
+				print("----------Random Action----------")
+				self.action_index = random.randrange(ACTIONS)
+				self.a_t[random.randrange(ACTIONS)] = 1
+			else:
+				self.action_index = np.argmax(self.readout_t)
+				self.a_t[self.action_index] = 1
+		else:
+			self.a_t[0] = 1 # do nothing
 
-        # scale down epsilon
-        if self.epsilon > FINAL_EPSILON and self.t > OBSERVE:
-            self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
+		# scale down epsilon
+		if self.epsilon > FINAL_EPSILON and self.t > OBSERVE:
+			self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
 
 		marine = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Terran.Marine]
 		marine = marine[0]
@@ -276,42 +278,46 @@ def main(unused_argv):
 				timesteps = env.reset()
 				agent.reset()
 
-				model = buildmodel()
 				agent.terminal = False
+				agent.s, agent.readout, agent.h_fc1 = agent.createNetwork()
 
-                agent.s, agent.readout, agent.h_fc1 = agent.createNetwork()
+				# define the cost function
+				agent.a = tf.placeholder("float", [None, ACTIONS])
+				agent.y = tf.placeholder("float", [None])
+				agent.readout_action = tf.reduce_sum(tf.multiply(agent.readout, agent.a), reduction_indices=1)
+				agent.cost = tf.reduce_mean(tf.square(agent.y - agent.readout_action))
+				agent.train_step = tf.train.AdamOptimizer(1e-6).minimize(agent.cost)
 
-                # define the cost function
-                agent.a = tf.placeholder("float", [None, ACTIONS])
-                agent.y = tf.placeholder("float", [None])
-                agent.readout_action = tf.reduce_sum(tf.multiply(agent.readout, agent.a), reduction_indices=1)
-                agent.cost = tf.reduce_mean(tf.square(agent.y - agent.readout_action))
-                agent.train_step = tf.train.AdamOptimizer(1e-6).minimize(agent.cost)
+				# store the previous observations in replay memory
+				agent.D = deque()
 
-                # store the previous observations in replay memory
-                agent.D = deque()
+				# printing
+				agent.a_file = open("logs_" + GAME + "/readout.txt", 'w')
+				agent.h_file = open("logs_" + GAME + "/hidden.txt", 'w')
 
-                # printing
-                agent.a_file = open("logs_" + GAME + "/readout.txt", 'w')
-                agent.h_file = open("logs_" + GAME + "/hidden.txt", 'w')
+				agent.x_t = agent.grab_screen(timesteps[0])
+				print("SHAPE: {}".format(agent.x_t.shape))
+				agent.r_t = -0.1
+				agent.ret, agent.x_t = cv2.threshold(agent.x_t, 1, 255, cv2.THRESH_BINARY)
+				agent.s_t = np.stack((agent.x_t, agent.x_t, agent.x_t, agent.x_t), axis=2)
+				agent.a_t = np.zeros([ACTIONS])
+				agent.a_t[0] = 1
+				agent.action_index = 0
+				agent.total_reward = 0
+				agent.readout_t = 0
+				agent.sess = tf.InteractiveSession()
+				# saving and loading networks
+				agent.saver = tf.train.Saver()
+				agent.sess.run(tf.initialize_all_variables())
+				agent.checkpoint = tf.train.get_checkpoint_state("saved_networks")
+				# if checkpoint and checkpoint.model_checkpoint_path:
+				#     saver.restore(sess, checkpoint.model_checkpoint_path)
+				#     print("Successfully loaded:", checkpoint.model_checkpoint_path)
+				# else:
+				#     print("Could not find old network weights")
 
-    			agent.x_t = self.grab_screen(obs)
-    			agent.r_t = -0.1
-                agent.ret, self.x_t = cv2.threshold(x_t1, 1, 255, cv2.THRESH_BINARY)
-                agent.s_t = np.stack((agent.x_t, agent.x_t, agent.x_t, agent.x_t), axis=2)
-
-                # saving and loading networks
-                saver = tf.train.Saver()
-                agent.sess.run(tf.initialize_all_variables())
-                checkpoint = tf.train.get_checkpoint_state("saved_networks")
-                # if checkpoint and checkpoint.model_checkpoint_path:
-                #     saver.restore(sess, checkpoint.model_checkpoint_path)
-                #     print("Successfully loaded:", checkpoint.model_checkpoint_path)
-                # else:
-                #     print("Could not find old network weights")
-
-                self.epsilon = INITIAL_EPSILON
-                self.t = 0
+				agent.epsilon = INITIAL_EPSILON
+				agent.t = 0
 
 				while True:
 

@@ -6,4 +6,4 @@ main_copy_copy.py
 model.h5
 model.json
 objects/
-
+logs_sc2/
