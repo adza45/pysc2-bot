@@ -25,12 +25,12 @@ os.environ["SC2PATH"] = '/media/adamselement/SAMSUNG SSD/Projects/match-runner/s
 #game parameters
 ACTIONS = 5 # possible actions: jump, do nothing
 GAMMA = 0.99 # decay rate of past observations original 0.99
-OBSERVATION = 10000. # timesteps to observe before training
-EXPLORE = 100000  # frames over which to anneal epsilon
+OBSERVATION = 10000 # timesteps to observe before training
+EXPLORE = 300000  # frames over which to anneal epsilon
 FINAL_EPSILON = 0.0001 # final value of epsilon
 INITIAL_EPSILON = 0.9 # starting value of epsilon
-REPLAY_MEMORY = 50000 # number of previous transitions to remember
-BATCH = 32 # size of minibatch
+REPLAY_MEMORY = 25000 # number of previous transitions to remember
+BATCH = 16 # size of minibatch
 FRAME_PER_ACTION = 1
 #LEARNING_RATE = 1e-4
 LEARNING_RATE = 0.0001
