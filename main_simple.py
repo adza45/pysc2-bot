@@ -23,10 +23,10 @@ from collections import deque
 os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
 
 #game parameters
-ACTIONS = 5 # possible actions: jump, do nothing
+ACTIONS = 5 # possible actions: jump, do nothin1g
 GAMMA = 0.99 # decay rate of past observations original 0.99
 OBSERVE = 10000 # timesteps to observe before training
-EXPLORE = 500000  # frames over which to anneal epsilon
+EXPLORE = 2000000  # frames over which to anneal epsilon
 FINAL_EPSILON = 0.0001 # final value of epsilon
 INITIAL_EPSILON = 0.9 # starting value of epsilon
 REPLAY_MEMORY = 50000 # number of previous transitions to remember
@@ -148,9 +148,9 @@ class terranAgent(base_agent.BaseAgent):
 
 		self.score = obs.observation['score_cumulative'][0]
 		if self.score > self.previous_score:
-			self.r_t += BEACON_REWARD
+			self.r_t = BEACON_REWARD
 		else:
-			self.r_t -= 0.1
+			self.r_t = -0.1
 
 		self.previous_score = self.score
 
@@ -202,7 +202,7 @@ class terranAgent(base_agent.BaseAgent):
 		# save progress every 1000 iterations
 		# save progress every 10000 iterations
 		if self.t % 10000 == 0:
-			saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step = t)
+			self.saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step = self.t)
 
 		state = ""
 		if self.t <= OBSERVE:

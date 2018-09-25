@@ -7,3 +7,4 @@ model.h5
 model.json
 objects/
 logs_sc2/
+saved_networks/
