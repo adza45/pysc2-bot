@@ -20,13 +20,15 @@ import tensorflow as tf
 import pickle
 from collections import deque
 
-os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
+#os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
+#os.environ["SC2PATH"] = '/media/adamselement/SAMSUNG SSD/Projects/match-runner/sc2-bot-match-runner/StarCraftII'
+os.environ["SC2PATH"] = 'G:/Games/Battlenet/StarCraft II'
 
 #game parameters
 ACTIONS = 5 # possible actions: jump, do nothin1g
-GAMMA = 0.99 # decay rate of past observations original 0.99
+GAMMA = 0.20 # decay rate of past observations original 0.99
 OBSERVE = 10000 # timesteps to observe before training
-EXPLORE = 2000000  # frames over which to anneal epsilon
+EXPLORE = 3000000  # frames over which to anneal epsilon
 FINAL_EPSILON = 0.0001 # final value of epsilon
 INITIAL_EPSILON = 0.9 # starting value of epsilon
 REPLAY_MEMORY = 50000 # number of previous transitions to remember
@@ -34,7 +36,7 @@ BATCH = 32 # size of minibatch
 FRAME_PER_ACTION = 1
 GAME = 'sc2'
 #LEARNING_RATE = 1e-4
-LEARNING_RATE = 0.0001
+LEARNING_RATE = 0.001
 img_rows , img_cols = 64,84
 img_channels = 4 #We stack 4 frames
 
@@ -45,11 +47,16 @@ _NOT_QUEUED = [0]
 _QUEUED = [1]
 _NO_OP = actions.FUNCTIONS.no_op.id
 
+
 class terranAgent(base_agent.BaseAgent):
 	def __init__(self):
 		super(terranAgent, self).__init__()
 		self.move_coordinates = (0, 0)
 		self.previous_score = 0
+
+	#Based From
+	#https://github.com/yenchenlin/DeepLearningFlappyBird/blob/master/LICENSE
+	#https://github.com/yenchenlin/DeepLearningFlappyBird/blob/master/deep_q_network.py
 
 	def weight_variable(self, shape):
 		initial = tf.truncated_normal(shape, stddev = 0.01)
@@ -95,8 +102,6 @@ class terranAgent(base_agent.BaseAgent):
 		h_conv3 = tf.nn.relu(self.conv2d(h_conv2, W_conv3, 1) + b_conv3)
 		#h_pool3 = max_pool_2x2(h_conv3)
 
-		#h_pool3_flat = tf.reshape(h_pool3, [-1, 256])
-		#h_conv3_flat = tf.reshape(h_conv3, [-1, 1600])
 		h_conv3_flat = tf.reshape(h_conv3, [-1, 1536])
 
 		h_fc1 = tf.nn.relu(tf.matmul(h_conv3_flat, W_fc1) + b_fc1)
@@ -113,16 +118,14 @@ class terranAgent(base_agent.BaseAgent):
 		game_data = np.zeros((64, 84, 3), np.uint8)
 
 		for unit in obs.observation.feature_units:
+			#print("UNIT: {}".format(dir(unit)))
+			color = (math.ceil(unit.unit_type / 2), math.ceil(unit.unit_type / 2), math.ceil(unit.unit_type / 2))
 			if unit.unit_type == 317:
-				cv2.circle(game_data, (int(unit.x), int(unit.y)), int(unit.radius), (128, 128, 128), math.ceil(int(unit.radius*0.1)))
+				cv2.circle(game_data, (int(unit.x), int(unit.y)), int(unit.radius), (128,128,128))
 			elif unit.unit_type == units.Terran.Marine:
-				cv2.circle(game_data, (int(unit.x), int(unit.y)), int(unit.radius), (255, 255, 255), math.ceil(int(unit.radius*0.1)))
+				cv2.circle(game_data, (int(unit.x), int(unit.y)), int(unit.radius),(255,255,255))
 
-		#grayed is current state
 		image = cv2.cvtColor(game_data, cv2.COLOR_BGR2GRAY)
-
-		resized = cv2.resize(image, dsize=None, fx=2, fy=2)
-		cv2.imshow("Map", resized)
 		cv2.waitKey(1)
 
 		return image
@@ -138,8 +141,12 @@ class terranAgent(base_agent.BaseAgent):
 	def step(self, obs):
 		super(terranAgent, self).step(obs)
 
-		if obs.first():
+		if obs.last():
+			print("LAST")
+			self.terminal = True
 
+		if obs.first():
+			print("FIRST")
 			marine = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Terran.Marine]
 
 			if len(marine) > 0:
@@ -155,20 +162,19 @@ class terranAgent(base_agent.BaseAgent):
 		self.previous_score = self.score
 
 		self.x_t1 = self.grab_screen(obs)
-		self.ret, self.x_t1 = cv2.threshold(self.x_t1, 1, 255, cv2.THRESH_BINARY)
+		#self.ret, self.x_t1 = cv2.threshold(self.x_t1, 1, 255, cv2.THRESH_BINARY)
 		self.x_t1 = np.reshape(self.x_t1, (64, 84, 1))
 		self.s_t1 = np.append(self.x_t1, self.s_t[:, :, :3], axis=2)
-
 		self.last_time = time.time()
+
+		resized = cv2.resize(self.s_t1, dsize=None, fx=2, fy=2)
+		cv2.imshow("Stacked Image", resized)
 
 		# store the transition in D
 		self.D.append((self.s_t, self.a_t, self.r_t, self.s_t1, self.terminal))
 
 		if len(self.D) > REPLAY_MEMORY:
 			self.D.popleft()
-
-		#only train if done observing; sample a minibatch to train on
-		#trainBatch(random.sample(self.D, BATCH)) if self.t > self.OBSERVE
 
 		if self.t > OBSERVE:
 			minibatch = random.sample(self.D, BATCH)
@@ -195,12 +201,11 @@ class terranAgent(base_agent.BaseAgent):
 				self.a : a_batch,
 				self.s : s_j_batch}
 			)
+
 		self.s_t = self.s_t1
 		self.t = self.t + 1
 		self.total_reward += self.r_t
 
-		# save progress every 1000 iterations
-		# save progress every 10000 iterations
 		if self.t % 10000 == 0:
 			self.saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step = self.t)
 
@@ -298,7 +303,7 @@ def main(unused_argv):
 				agent.x_t = agent.grab_screen(timesteps[0])
 				print("SHAPE: {}".format(agent.x_t.shape))
 				agent.r_t = -0.1
-				agent.ret, agent.x_t = cv2.threshold(agent.x_t, 1, 255, cv2.THRESH_BINARY)
+				#agent.ret, agent.x_t = cv2.threshold(agent.x_t, 1, 255, cv2.THRESH_BINARY)
 				agent.s_t = np.stack((agent.x_t, agent.x_t, agent.x_t, agent.x_t), axis=2)
 				agent.a_t = np.zeros([ACTIONS])
 				agent.a_t[0] = 1
@@ -320,11 +325,7 @@ def main(unused_argv):
 				agent.t = 0
 
 				while True:
-
 				  step_actions = [agent.step(timesteps[0])]
-
-				  if timesteps[0].last():
-					  agent.terminal = True
 				  timesteps = env.step(step_actions)
 
 	except KeyboardInterrupt:

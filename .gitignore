@@ -3,8 +3,9 @@ backup/
 dino_run.py
 main_copy.py
 main_copy_copy.py
-model.h5
-model.json
+move_to_beacon/model.h5
+move_to_beacon/model.json
 objects/
-logs_sc2/
-saved_networks/
+move_to_beacon/logs_sc2/
+move_to_beacon/saved_networks/
+test.txt
