@@ -7,5 +7,5 @@ move_to_beacon/model.h5
 move_to_beacon/model.json
 objects/
 move_to_beacon/logs_sc2/
-move_to_beacon/saved_networks/
 test.txt
+move_to_beacon/saved*
