@@ -30,7 +30,7 @@ GAMMA = 0.99
 OBSERVE = 10000
 EXPLORE = 10000000
 FINAL_EPSILON = 0.01
-INITIAL_EPSILON = 0.9
+INITIAL_EPSILON = 0.99
 REPLAY_MEMORY = 50000
 BATCH = 32
 FRAME_PER_ACTION = 1
@@ -57,6 +57,9 @@ class terranAgent(base_agent.BaseAgent):
 		self.previous_score = 0 #Initialize previous score
 		self.previous_zerglings = []
 		self.total_reward = 0
+		self.current_reward = 0
+		self.top_random_reward = 0
+		self.top_explore_reward = 0
 
 	#Based From
 	#https://github.com/yenchenlin/DeepLearningFlappyBird/blob/master/LICENSE
@@ -119,9 +122,6 @@ class terranAgent(base_agent.BaseAgent):
 		return action in obs.observation.available_actions
 
 	def do_actions(self, obs, choice):
-
-		print("Choice: {}".format(choice))
-
 		if choice == 0:
 			hellion = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Terran.Hellion]
 			if len(hellion) > 0:
@@ -206,12 +206,12 @@ class terranAgent(base_agent.BaseAgent):
 		super(terranAgent, self).step(obs)
 
 		if obs.last():
-			print("LAST")
+			self.current_reward = 0
 			self.terminal = True
 
 
 		if obs.first():
-			print("FIRST")
+			self.current_reward = 0
 			self.previous_zerglings = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Zerg.Zergling]
 
 		reward = 0
@@ -220,7 +220,7 @@ class terranAgent(base_agent.BaseAgent):
 		for x in range(0, len(zerglings)):
 			if len(zerglings) == len(self.previous_zerglings):
 				if zerglings[x][2] < self.previous_zerglings[x][2]:
-					reward = reward + 0.005
+					reward = reward + .001#0.005
 
 		self.previous_zerglings = zerglings
 
@@ -231,7 +231,7 @@ class terranAgent(base_agent.BaseAgent):
 		else:
 			#self.r_t = -0.1
 			if reward == 0:
-				reward = -0.01
+				reward = -0.1
 
 			self.r_t = reward
 
@@ -285,17 +285,25 @@ class terranAgent(base_agent.BaseAgent):
 		if self.t % 10000 == 0:
 			self.saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step = self.t)
 
+		self.current_reward = self.current_reward +self.r_t
+
 		state = ""
 		if self.t <= OBSERVE:
 			state = "observe"
+			if self.current_reward > self.top_random_reward:
+				self.top_random_reward = self.current_reward
 		elif self.t > OBSERVE and self.t <= OBSERVE + EXPLORE:
 			state = "explore"
 		else:
 			state = "train"
 
+		if state == "explore" or state == "train":
+			if self.current_reward > self.top_explore_reward:
+				self.top_explore_reward = self.current_reward
+
 		print("TIMESTEP", self.t, "TOTAL REWARD", self.total_reward, "/ STATE", state, \
 			"/ EPSILON", self.epsilon, "/ ACTION", self.action_index, "/ REWARD", self.r_t, \
-			"/ Q_MAX %e" % np.max(self.readout_t))
+			"/ Q_MAX %e" % np.max(self.readout_t), "/ TOP RANDOM", self.top_random_reward, "TOP EXP/TRN", self.top_explore_reward)
 
 		self.terminal = False
 
@@ -305,7 +313,7 @@ class terranAgent(base_agent.BaseAgent):
 		self.action_index = 0
 		if self.t % FRAME_PER_ACTION == 0:
 			if random.random() <= self.epsilon:
-				print("----------Random Action----------")
+				#print("----------Random Action----------")
 				self.action_index = random.randrange(ACTIONS)
 				self.a_t[random.randrange(ACTIONS)] = 1
 			else:
@@ -330,7 +338,7 @@ def main(unused_argv):
 				  agent_interface_format=features.AgentInterfaceFormat(
 					feature_dimensions=features.Dimensions(screen=84, minimap=64),
 					use_feature_units=True),
-				  step_mul=1,
+				  step_mul=16,
 				  game_steps_per_episode=0,
 				  visualize=True) as env:
 
