@@ -9,3 +9,7 @@ objects/
 move_to_beacon/logs_sc2/
 test.txt
 move_to_beacon/saved*
+hellionZerglings/saved*
+hellionZerglings/logs_sc2/
+hellionZerglings/model.h5
+hellionZerglings/model.json

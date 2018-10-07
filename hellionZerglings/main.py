@@ -120,6 +120,8 @@ class terranAgent(base_agent.BaseAgent):
 
 	def do_actions(self, obs, choice):
 
+		print("Choice: {}".format(choice))
+
 		if choice == 0:
 			hellion = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Terran.Hellion]
 			if len(hellion) > 0:
@@ -233,8 +235,6 @@ class terranAgent(base_agent.BaseAgent):
 
 			self.r_t = reward
 
-		self.total_reward = self.total_reward + self.r_t
-
 		#print("r_t: {}, score: {}, previous score: {}, total reward: {}".format(self.r_t, self.score, self.previous_score, self.total_reward))
 		self.previous_score = self.score
 
@@ -338,6 +338,48 @@ def main(unused_argv):
 
 				timesteps = env.reset()
 				agent.reset()
+
+
+				agent.terminal = False
+				agent.s, agent.readout, agent.h_fc1 = agent.createNetwork()
+
+				# define the cost function
+				agent.a = tf.placeholder("float", [None, ACTIONS])
+				agent.y = tf.placeholder("float", [None])
+				agent.readout_action = tf.reduce_sum(tf.multiply(agent.readout, agent.a), reduction_indices=1)
+				agent.cost = tf.reduce_mean(tf.square(agent.y - agent.readout_action))
+				agent.train_step = tf.train.AdamOptimizer(1e-6).minimize(agent.cost)
+
+				# store the previous observations in replay memory
+				agent.D = deque()
+
+				# printing
+				agent.a_file = open("logs_" + GAME + "/readout.txt", 'w')
+				agent.h_file = open("logs_" + GAME + "/hidden.txt", 'w')
+
+				agent.x_t = agent.grab_screen(timesteps[0])
+				print("SHAPE: {}".format(agent.x_t.shape))
+				agent.r_t = -0.1
+				#agent.ret, agent.x_t = cv2.threshold(agent.x_t, 1, 255, cv2.THRESH_BINARY)
+				agent.s_t = np.stack((agent.x_t, agent.x_t, agent.x_t, agent.x_t), axis=2)
+				agent.a_t = np.zeros([ACTIONS])
+				agent.a_t[0] = 1
+				agent.action_index = 0
+				agent.total_reward = 0
+				agent.readout_t = 0
+				agent.sess = tf.InteractiveSession()
+				# saving and loading networks
+				agent.saver = tf.train.Saver()
+				agent.sess.run(tf.initialize_all_variables())
+				agent.checkpoint = tf.train.get_checkpoint_state("saved_networks")
+				# if checkpoint and checkpoint.model_checkpoint_path:
+				#     saver.restore(sess, checkpoint.model_checkpoint_path)
+				#     print("Successfully loaded:", checkpoint.model_checkpoint_path)
+				# else:
+				#     print("Could not find old network weights")
+
+				agent.epsilon = INITIAL_EPSILON
+				agent.t = 0
 
 				while True:
 				  step_actions = [agent.step(timesteps[0])]
