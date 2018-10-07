@@ -20,23 +20,23 @@ import tensorflow as tf
 import pickle
 from collections import deque
 
-#os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
+os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
 #os.environ["SC2PATH"] = '/media/adamselement/SAMSUNG SSD/Projects/match-runner/sc2-bot-match-runner/StarCraftII'
-os.environ["SC2PATH"] = 'G:/Games/Battlenet/StarCraft II'
+#os.environ["SC2PATH"] = 'G:/Games/Battlenet/StarCraft II'
 
 #game parameters
 ACTIONS = 5 # possible actions: jump, do nothin1g
-GAMMA = 0.20 # decay rate of past observations original 0.99
-OBSERVE = 10000 # timesteps to observe before training
-EXPLORE = 3000000  # frames over which to anneal epsilon
+GAMMA = 0.10 # decay rate of past observations original 0.99
+OBSERVE = 1000 # timesteps to observe before training
+EXPLORE = 5000000  # frames over which to anneal epsilon
 FINAL_EPSILON = 0.0001 # final value of epsilon
-INITIAL_EPSILON = 0.9 # starting value of epsilon
+INITIAL_EPSILON = 0.25 # starting value of epsilon
 REPLAY_MEMORY = 50000 # number of previous transitions to remember
 BATCH = 32 # size of minibatch
 FRAME_PER_ACTION = 1
 GAME = 'sc2'
 #LEARNING_RATE = 1e-4
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.0001
 img_rows , img_cols = 64,84
 img_channels = 4 #We stack 4 frames
 
@@ -239,8 +239,8 @@ class terranAgent(base_agent.BaseAgent):
 			self.a_t[0] = 1 # do nothing
 
 		# scale down epsilon
-		if self.epsilon > FINAL_EPSILON and self.t > OBSERVE:
-			self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
+		# if self.epsilon > FINAL_EPSILON and self.t > OBSERVE:
+		# 	self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON) / EXPLORE
 
 		marine = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Terran.Marine]
 		marine = marine[0]
@@ -315,11 +315,11 @@ def main(unused_argv):
 				agent.saver = tf.train.Saver()
 				agent.sess.run(tf.initialize_all_variables())
 				agent.checkpoint = tf.train.get_checkpoint_state("saved_networks")
-				# if checkpoint and checkpoint.model_checkpoint_path:
-				#     saver.restore(sess, checkpoint.model_checkpoint_path)
-				#     print("Successfully loaded:", checkpoint.model_checkpoint_path)
-				# else:
-				#     print("Could not find old network weights")
+				if agent.checkpoint and agent.checkpoint.model_checkpoint_path:
+				    agent.saver.restore(agent.sess, agent.checkpoint.model_checkpoint_path)
+				    print("Successfully loaded:", agent.checkpoint.model_checkpoint_path)
+				else:
+				    print("Could not find old network weights")
 
 				agent.epsilon = INITIAL_EPSILON
 				agent.t = 0
