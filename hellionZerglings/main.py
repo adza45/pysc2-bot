@@ -29,10 +29,12 @@ _LOAD_SCREEN = actions.FUNCTIONS.Load_screen.id
 _UNLOADALLAT_SCREEN = actions.FUNCTIONS.UnloadAllAt_screen.id
 _SELECT_ARMY = actions.FUNCTIONS.select_army.id
 _ATTACK_SCREEN = actions.FUNCTIONS.Attack_screen.id
+_HOLDPOSITION = actions.FUNCTIONS.HoldPosition_quick.id
+
 _NOT_QUEUED = [0]
 _QUEUED = [1]
 
-ACTIONS = 18
+ACTIONS = 20
 
 class terranAgent(base_agent.BaseAgent):
 	def __init__(self):
@@ -89,6 +91,13 @@ class terranAgent(base_agent.BaseAgent):
 		elif choice == 17:
 			if self.can_do(obs, _ATTACK_SCREEN):
 					return actions.FunctionCall(_ATTACK_SCREEN, [_NOT_QUEUED, self.previous_location])
+
+		elif choice == 18:
+			if self.can_do(obs, _HOLDPOSITION):
+				return actions.FunctionCall(_HOLDPOSITION, [_NOT_QUEUED])
+
+		elif choice == 19:
+			return actions.FUNCTIONS.no_op()
 
 		return actions.FUNCTIONS.no_op()
 
