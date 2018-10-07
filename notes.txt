@@ -1,0 +1,45 @@
+Running sc2 GUI using pysc2 on Linux with Wine:
+
+pysc2 -> run_configs -> platforms.py
+
+Change:
+@classmethod
+def priority(cls):
+  if platform.system() == "Windows":
+    return 1
+
+To:
+@classmethod
+def priority(cls):
+  return 1
+
+@classmethod
+def priority(cls):
+  if platform.system() == "Linux":
+    return 1
+
+
+@classmethod
+def priority(cls):
+  if platform.system() == "not linux":
+    return 1
+
+pysc2 -> lib -> sc_process.py
+
+Change:
+def _launch(self, run_config, args, **kwargs):
+  """Launch the process and return the process object."""
+
+  del kwargs
+
+  ...
+
+To (add on line):
+def _launch(self, run_config, args, **kwargs):
+  """Launch the process and return the process object."""
+
+  args[0:0] = ["wine"]
+
+  del kwargs
+
+  ...
