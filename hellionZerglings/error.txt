@@ -1,0 +1,193 @@
+TIMESTEP 1209997 TOTAL REWARD 13826.350999895807 / STATE explore / EPSILON 0.843000489960801 / ACTION 17 / REWARD -0.1 / Q_MAX nan / TOP RANDOM 20.72 TOP EXP/TRN 40.522999999999996
+TIMESTEP 1209998 TOTAL REWARD 13826.250999895807 / STATE explore / EPSILON 0.843000367460801 / ACTION 18 / REWARD -0.1 / Q_MAX nan / TOP RANDOM 20.72 TOP EXP/TRN 40.522999999999996
+TIMESTEP 1209999 TOTAL REWARD 13826.150999895806 / STATE explore / EPSILON 0.843000244960801 / ACTION 8 / REWARD -0.1 / Q_MAX nan / TOP RANDOM 20.72 TOP EXP/TRN 40.522999999999996
+TIMESTEP 1210000 TOTAL REWARD 13826.050999895806 / STATE explore / EPSILON 0.8430001224608009 / ACTION 12 / REWARD -0.1 / Q_MAX nan / TOP RANDOM 20.72 TOP EXP/TRN 40.522999999999996
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+TIMESTEP 1210001 TOTAL REWARD 13826.055999895805 / STATE explore / EPSILON 0.8429999999608009 / ACTION 0 / REWARD 0.005 / Q_MAX nan / TOP RANDOM 20.72 TOP EXP/TRN 40.522999999999996
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+I1008 11:14:54.381715 140290513692416 sc2_env.py:531] Environment Close
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+unable to parse websocket frame.
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+W1008 11:17:17.810377 140290513692416 sc_process.py:200] Killing the process.
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+I1008 11:17:41.336884 140290513692416 sc_process.py:182] Shutdown with return code: -9
+ALSA lib pcm.c:7963:(snd_pcm_recover) underrun occurred
+Traceback (most recent call last):
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_socket.py", line 81, in recv
+    bytes_ = sock.recv(bufsize)
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 62, in catch_websocket_connection_errors
+    yield
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 161, in _read
+    response_str = self._sock.recv()
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_core.py", line 302, in recv
+    opcode, data = self.recv_data()
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_core.py", line 319, in recv_data
+    opcode, frame = self.recv_data_frame(control_frame)
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_core.py", line 332, in recv_data_frame
+    frame = self.recv_frame()
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_core.py", line 366, in recv_frame
+    return self.frame_buffer.recv_frame()
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_abnf.py", line 361, in recv_frame
+    self.recv_header()
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_abnf.py", line 309, in recv_header
+    header = self.recv_strict(2)
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_abnf.py", line 396, in recv_strict
+    bytes_ = self.recv(min(16384, shortage))
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_core.py", line 441, in _recv
+    return recv(self.sock, bufsize)
+  File "/home/adam/.local/lib/python3.5/site-packages/websocket/_socket.py", line 84, in recv
+    raise WebSocketTimeoutException(message)
+websocket._exceptions.WebSocketTimeoutException: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "main.py", line 399, in <module>
+    app.run(main)
+  File "/home/adam/.local/lib/python3.5/site-packages/absl/app.py", line 300, in run
+    _run_main(main, args)
+  File "/home/adam/.local/lib/python3.5/site-packages/absl/app.py", line 251, in _run_main
+    sys.exit(main(argv))
+  File "main.py", line 394, in main
+    timesteps = env.step(step_actions)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/stopwatch.py", line 197, in _stopwatch
+    return func(*args, **kwargs)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/env/sc2_env.py", line 449, in step
+    self._controllers, self._features, self._obs, actions))
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/run_parallel.py", line 56, in run
+    return [funcs[0]()]
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/remote_controller.py", line 218, in act
+    return self.actions(sc_pb.RequestAction(actions=[action]))
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/remote_controller.py", line 74, in _skip_status
+    return func(self, *args, **kwargs)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/remote_controller.py", line 88, in _valid_status
+    return func(self, *args, **kwargs)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/stopwatch.py", line 197, in _stopwatch
+    return func(*args, **kwargs)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/remote_controller.py", line 213, in actions
+    return self._client.send(action=req_action)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 136, in send
+    res = self.send_req(sc_pb.Request(**kwargs))
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 122, in send_req
+    return self.read()
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/stopwatch.py", line 197, in _stopwatch
+    return func(*args, **kwargs)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 95, in read
+    response = self._read()
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 161, in _read
+    response_str = self._sock.recv()
+  File "/usr/lib/python3.5/contextlib.py", line 77, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/home/adam/.local/lib/python3.5/site-packages/pysc2/lib/protocol.py", line 67, in catch_websocket_connection_errors
+    raise ConnectionError("Websocket timed out.")
+pysc2.lib.protocol.ConnectionError: Websocket timed out.
+I1008 18:53:45.344181 140290513692416 sc2_env.py:531] Environment Close
+^C^C^C

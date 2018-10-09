@@ -21,14 +21,14 @@ import pickle
 from collections import deque
 
 #os.environ["SC2PATH"] = '/media/adamselement/SAMSUNG SSD/Projects/match-runner/sc2-bot-match-runner/StarCraftII'
-#os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
-os.environ["SC2PATH"] = '/home/adamselement/.wine/drive_c/Program Files (x86)/StarCraft II'
+os.environ["SC2PATH"] = '/home/adam/Games/StarCraftII'
+#os.environ["SC2PATH"] = '/home/adamselement/.wine/drive_c/Program Files (x86)/StarCraft II'
 
 #game parameters
 ACTIONS = 20
 GAMMA = 0.99
 OBSERVE = 10000
-EXPLORE = 10000000
+EXPLORE = 8000000
 FINAL_EPSILON = 0.01
 INITIAL_EPSILON = 0.99
 REPLAY_MEMORY = 50000
@@ -212,17 +212,17 @@ class terranAgent(base_agent.BaseAgent):
 
 		if obs.first():
 			self.current_reward = 0
-			self.previous_zerglings = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Zerg.Zergling]
+			#self.previous_zerglings = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Zerg.Zergling]
 
 		reward = 0
 
-		zerglings = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Zerg.Zergling]
-		for x in range(0, len(zerglings)):
-			if len(zerglings) == len(self.previous_zerglings):
-				if zerglings[x][2] < self.previous_zerglings[x][2]:
-					reward = reward + .001#0.005
-
-		self.previous_zerglings = zerglings
+		# zerglings = [unit for unit in obs.observation.feature_units if unit.unit_type == units.Zerg.Zergling]
+		# for x in range(0, len(zerglings)):
+		# 	if len(zerglings) == len(self.previous_zerglings):
+		# 		if zerglings[x][2] < self.previous_zerglings[x][2]:
+		# 			reward = reward + .001#0.005
+		#
+		# self.previous_zerglings = zerglings
 
 		self.score = obs.observation['score_cumulative'][0]
 		if self.score > self.previous_score:
@@ -333,7 +333,7 @@ def main(unused_argv):
 	try:
 		while True:
 			with sc2_env.SC2Env(
-				  map_name="DefeatZealots2",
+				  map_name="HellionZerglings",
 				  players=[sc2_env.Agent(sc2_env.Race.terran)],
 				  agent_interface_format=features.AgentInterfaceFormat(
 					feature_dimensions=features.Dimensions(screen=84, minimap=64),
@@ -380,9 +380,9 @@ def main(unused_argv):
 				agent.saver = tf.train.Saver()
 				agent.sess.run(tf.initialize_all_variables())
 				agent.checkpoint = tf.train.get_checkpoint_state("saved_networks")
-				# if checkpoint and checkpoint.model_checkpoint_path:
-				#     saver.restore(sess, checkpoint.model_checkpoint_path)
-				#     print("Successfully loaded:", checkpoint.model_checkpoint_path)
+				# if agent.checkpoint and agent.checkpoint.model_checkpoint_path:
+				#     agent.saver.restore(agent.sess, agent.checkpoint.model_checkpoint_path)
+				#     print("Successfully loaded:", agent.checkpoint.model_checkpoint_path)
 				# else:
 				#     print("Could not find old network weights")
 
